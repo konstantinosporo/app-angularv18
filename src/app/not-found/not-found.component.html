@@ -1,0 +1,9 @@
+<div class="h-screen flex justify-center items-center w-full">
+  <span class="font-mono bg-red-100 p-4 rounded-md shadow-sm">
+    <ng-icon name="heroExclamationTriangle" class="text-red-700"></ng-icon>
+    <h1>Oops! Something went wrong.</h1>
+    <p>The provided URL was wrong, or there was another problem with the server.</p>
+    <p>Please try again later.</p>
+    <a [routerLink]="['/login']" routerLinkActive="router-link-active">Back to Home</a>
+  </span>
+</div>

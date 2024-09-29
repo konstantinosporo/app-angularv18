@@ -1,1 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  @apply font-poppins 
+}
+
+input {
+  @apply rounded-lg border-[1px] p-1;
+}
+
+/* Pristine: Not touched or modified */
+input.ng-pristine {
+  @apply border-gray-300;
+  /* Neutral border */
+}
+
+/* Dirty: User has interacted with the field */
+input.ng-dirty {
+  @apply border-blue-500;
+  /* Highlight for interaction */
+}
+
+/* Invalid: Apply styles only after interaction (touched and invalid) */
+input.ng-touched.ng-invalid {
+  @apply border-red-500;
+  /* Red border for invalid input after touch */
+}
+
+/* Dirty and Invalid: User interacted, but input is still invalid */
+input.ng-dirty.ng-touched.ng-invalid {
+  @apply border-red-500 text-red-600;
+  /* Red border and text */
+}
+
+/* Optionally for valid inputs (to style valid state) */
+input.ng-valid {
+  @apply border-green-500;
+}
+
+label {
+  @apply text-sm font-medium text-gray-700;
+}
+
+.authButton {
+  @apply bg-gradient-to-r from-pink-500 to-violet-500 text-white p-1 rounded-lg hover:animate-pulse transition-all duration-300 ease-in-out transform;
+}

@@ -1,0 +1,6 @@
+<h2>Users List</h2>
+<ul>
+  <li *ngFor="let user of usersService.users | async">
+    {{ user.name }} - {{ user.email }}
+  </li>
+</ul>

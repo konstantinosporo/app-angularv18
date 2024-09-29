@@ -1,0 +1,33 @@
+<p>login-form works!</p>
+
+<form [formGroup]="loginForm" (submit)="handleLogin()" class="w-96 mx-auto bg-slate-50 shadow-lg p-4 rounded-lg">
+  <div class="flex flex-col space-y-3">
+    <div class="text-3xl font-extrabold text-center">
+      <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+        Welcome back
+      </span>
+      <span class="text-slate-500 text-sm font-thin">
+        <p>Provide your personal info</p>
+      </span>
+    </div>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" formControlName="email" autocomplete="email">
+    <!-- Email validation message -->
+    <div *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)"
+      class="text-red-500">
+      Email is required for authentication.
+    </div>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" formControlName="password" autocomplete="current-password">
+    <!-- Password validation message -->
+    <div
+      *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)"
+      class="text-red-500">
+      Password is required for authentication.
+    </div>
+
+    <button type="submit" class="authButton">Login</button>
+  </div>
+</form>

@@ -1,0 +1,19 @@
+<p>register works!</p>
+
+<app-register-form (register)="onRegister($event)"></app-register-form>
+
+<!-- Display success message -->
+<div *ngIf="(successMessage$ | async) as successMsg">
+  <span class="bg-green-200 text-green-800 p-3 flex items-center w-96 mx-auto gap-3 rounded-lg text-sm mt-3 shadow-md">
+    <ng-icon name="heroCheck" class="text-green-800"></ng-icon>
+    {{ successMsg }}
+  </span>
+</div>
+
+<!-- Display error message -->
+<div *ngIf="(errorMessage$ | async) as errorMsg">
+  <span class="bg-red-200 text-red-800 p-3 flex items-center w-96 mx-auto gap-3 rounded-lg text-sm mt-3 shadow-md">
+    <ng-icon name="heroExclamationTriangle" class="text-red-800"></ng-icon>
+    {{ errorMsg }}
+  </span>
+</div>
