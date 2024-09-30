@@ -44,19 +44,19 @@ export function app(): express.Express {
   return server;
 }
 
-function run(): void {
-  const port = process.env['PORT'] || 4000;
+// function run(): void {
+//   const port = process.env['PORT'] || 4000;
 
-   console.log(`Environment: ${process.env['NODE_ENV']}`);
+//    console.log(`Environment: ${process.env['NODE_ENV']}`);
 
-  // Start up the Node server
-  const server = app();
-  server.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
-  });
-}
+//   // Start up the Node server
+//   const server = app();
+//   server.listen(port, () => {
+//     console.log(`Node Express server listening on http://localhost:${port}`);
+//   });
+// }
 
-if (process.env['NODE_ENV'] !== 'production') {
-  run();
-}
+// if (process.env['NODE_ENV'] !== 'production') {
+//   run();
+// }
 
