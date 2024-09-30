@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { RegisterFormComponent } from "./register-form/register-form.component";
-import { RegisterUser } from '../../../lib/definitions';
-import { UsersService } from '../users/users.service';
 import { CommonModule } from '@angular/common';
-import { BehaviorSubject } from 'rxjs';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { heroExclamationTriangle, heroCheck } from '@ng-icons/heroicons/outline';
+import { heroCheck, heroExclamationTriangle } from '@ng-icons/heroicons/outline';
+import { BehaviorSubject } from 'rxjs';
+import { RegisterUser } from '../../../../lib/definitions';
+import { UsersService } from '../../services/users.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -20,6 +21,7 @@ export class RegisterComponent {
   errorMessage$ = new BehaviorSubject<string | null>(null);
 
   private usersService = inject(UsersService);
+  private authService = inject(AuthService);
 
   async onRegister(user: RegisterUser): Promise<void> {
     const { name, email, password } = user;
@@ -28,6 +30,7 @@ export class RegisterComponent {
     if (registerSuccess) {
       try {
         await this.usersService.addUser(name, email, password);
+        await this.authService.register(email, password);
         this.successMessage$.next('Registration successful!');
         this.clearMessageAfterDelay(this.successMessage$);
         this.errorMessage$.next(null); 

@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RegisterUser } from '../../../../lib/definitions';
 import { BehaviorSubject } from 'rxjs';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroExclamationTriangle } from '@ng-icons/heroicons/outline';
+import { RegisterUser } from '../../../../../lib/definitions';
 @Component({
   selector: 'app-register-form',
   standalone: true,

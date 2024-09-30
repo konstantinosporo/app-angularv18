@@ -1,0 +1,22 @@
+<div class="flex justify-center items-center gap-3 mt-3">
+  <button (click)="loginWithGoogle()" class="bg-blue-500 text-white rounded-lg p-1">
+    Login with Google
+  </button>
+
+  <button (click)="loginWithGithub()" class="bg-slate-900 text-white rounded-lg p-1">
+    Login with Github
+  </button>
+
+  <button (click)="logout()" class="bg-red-500 text-white rounded-lg p-1">
+    Logout
+  </button>
+
+  <span>
+    <h1 *ngIf="user$ | async as user; else noUser">
+      Currently signed in as: {{ user.displayName || user.email }}
+    </h1>
+    <ng-template #noUser>
+      <h1>Not signed in</h1>
+    </ng-template>
+  </span>
+</div>

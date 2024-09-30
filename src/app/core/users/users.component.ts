@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
-import { UsersService } from './users.service';
+import { DataService } from '../../services/data.service';
+import { UsersService } from '../../services/users.service';
+
 
 @Component({
   selector: 'app-users',

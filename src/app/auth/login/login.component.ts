@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
+import { LoginUser, User } from '../../../../lib/definitions';
 import { LoginFormComponent } from './login-form/login-form.component';
-import { User, LoginUser } from '../../../lib/definitions';
+import { LoginProvidersComponent } from './login-providers/login-providers.component';
+
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [LoginFormComponent],
+  imports: [LoginFormComponent, LoginProvidersComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
