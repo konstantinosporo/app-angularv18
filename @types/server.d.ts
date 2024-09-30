@@ -1,6 +1,3 @@
-// @types/server.d.ts
-declare module 'server' {
-  import { Express } from 'express';
-
-  export function app(): Express;
+declare module '../dist/app-angularv18/server/server.mjs' {
+  export function app(): any; // Adjust the return type as needed
 }
