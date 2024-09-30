@@ -54,4 +54,7 @@ function run(): void {
   });
 }
 
-run();
+if (process.env['NODE_ENV'] !== 'production') {
+  run();
+}
+
