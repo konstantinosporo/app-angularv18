@@ -22,7 +22,14 @@
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./@types" // Add this line
+    ],
+    "paths": {
+      "server": ["@types/server"] // Maps the module name to the type declaration
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
