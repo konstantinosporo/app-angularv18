@@ -28,7 +28,7 @@
       "./@types" // Add this line
     ],
     "paths": {
-      "server": ["@types/server"] // Maps the module name to the type declaration
+      "server": ["./@types/server.d.ts"] // Maps the module name to the type declaration
     }
   },
   "angularCompilerOptions": {
