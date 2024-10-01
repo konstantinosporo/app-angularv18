@@ -88,6 +88,7 @@ export function app(): express.Express {
     const tokenDocRef = db.collection('verificationTokens').doc(token);
     const tokenDoc = await tokenDocRef.get();
 
+    console.log(tokenDocRef, tokenDoc);
     // first check if the token exists
     if (!tokenDoc.exists) {
       return res.status(404).send({ error: 'Token not found' });
