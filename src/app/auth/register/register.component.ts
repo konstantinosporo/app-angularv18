@@ -1,13 +1,14 @@
-import { Component, inject } from '@angular/core';
-import { RegisterFormComponent } from "./register-form/register-form.component";
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject } from '@angular/core';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroCheck, heroExclamationTriangle } from '@ng-icons/heroicons/outline';
 import { BehaviorSubject } from 'rxjs';
-import { RegisterUser } from '../../../../lib/definitions';
-import { UsersService } from '../../services/users.service';
+import { RegisterUser, VerificationToken } from '../../../../lib/definitions';
+import { DataService } from '../../services/data.service';
 import { AuthService } from '../../services/auth.service';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { UsersService } from '../../services/users.service';
+import { RegisterFormComponent } from "./register-form/register-form.component";
 
 @Component({
   selector: 'app-register',
@@ -21,27 +22,34 @@ export class RegisterComponent {
   successMessage$ = new BehaviorSubject<string | null>(null);
   errorMessage$ = new BehaviorSubject<string | null>(null);
 
-  private usersService = inject(UsersService);
-  private authService = inject(AuthService);
-  private http = inject(HttpClient);
-
+  private readonly usersService = inject(UsersService);
+  private readonly authService = inject(AuthService);
+  private readonly dataService = inject(DataService);
+  private readonly http = inject(HttpClient);
+  private token: VerificationToken | null = null;
 
   async onRegister(user: RegisterUser): Promise<void> {
     const { name, email, password } = user;
     const registerSuccess = this.register(name, email, password);
+    
 
     if (registerSuccess) {
       try {
         await this.usersService.addUser(name, email, password);
         await this.authService.register(email, password);
+        await this.dataService.generateVerificationToken(email)
+          .then((verificationToken) => this.token=verificationToken);
+        
 
         // call the api to send verification email
-        this.sendVerificationEmail(email).subscribe({
+        this.sendVerificationEmail(email,this.token?.token as string).subscribe({
           next: (response) => {
+            console.log("Response:", response); // Log the response here
             this.successMessage$.next('Registration successful! Verification email sent.');
             this.clearMessageAfterDelay(this.successMessage$);
           },
           error: (error) => {
+            console.log("Error:", error); // Log the error here
             this.errorMessage$.next('Registration successful, but failed to send verification email.');
             this.clearMessageAfterDelay(this.errorMessage$);
           },
@@ -49,6 +57,7 @@ export class RegisterComponent {
             console.log('Email sending process completed.');
           }
         });
+
 
       } catch (error) {
         if (error instanceof Error) {
@@ -74,12 +83,12 @@ export class RegisterComponent {
     return true;
   }
 
-  sendVerificationEmail(email: string) {
+  sendVerificationEmail(email: string, token: string) {
     return this.http.post('/api/send-email', {
-      from: 'no-reply@your-app.com',
+      to: email,
       subject: 'Email Verification',
       content: `Please click the following link to verify your email: 
-                https://your-app.com/verify-email?email=${email}`
+                https://app-angularv18.vercel.app/api/email-verification/?token=${token}`
     });
   }
 

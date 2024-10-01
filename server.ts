@@ -5,8 +5,12 @@ import nodemailer from 'nodemailer'; // Import nodemailer
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
+import admin from './firebaseAdmin';
 
-// Setup your Nodemailer transporter
+
+// Initialize Firestore
+const db = admin.firestore();
+
 const transporter = nodemailer.createTransport({
   host: process.env['GOOGLE_MAIL_HOST'],
   port: 465,
@@ -21,15 +25,14 @@ const transporter = nodemailer.createTransport({
 });
 
 // Function to send emails
-async function sendEmail(email: { from: string; subject: string; content: string }) {
+async function sendEmail(email: { to: string; subject: string; content: string }) {
   try {
     const info = await transporter.sendMail({
-      from: process.env['GOOGLE_EMAIL_USER'],
-      to: process.env['GOOGLE_EMAIL_USER'],
-      replyTo: email.from,
-      subject: `Message from ${email.from}: ${email.subject}`,
+      from: 'konstantinosporo@gmail.com',
+      to: email.to,
+      subject: `Message from ${email.to}: ${email.subject}`,
       text: `
-        New message from ${email.from}:
+        New message from ${email.to}:
         
         Subject:
         '${email.subject}'
@@ -37,17 +40,18 @@ async function sendEmail(email: { from: string; subject: string; content: string
         Message:
         ${email.content}
 
-        Reply to this email to contact ${email.from}.
+        Reply to this email to contact ${email.to}.
       `,
     });
 
-    console.log('Email sent:', info.response);
-    return `Email sent successfully: ${info.response}`;
+    console.log('Email sent:', info.response, email.to);
+    return { message: `Email sent successfully: ${info.response}` };
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('Error sending email:', error); // Log the error here to see more details
     throw new Error('Failed to send email');
   }
 }
+
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -63,11 +67,11 @@ export function app(): express.Express {
 
   server.use(express.json());
 
-  // Example Express Rest API endpoints
+  // send email api
   server.post('/api/send-email', async (req, res) => {
-    const { from, subject, content } = req.body; // Ensure body-parser is set up to handle JSON
+    const { to, subject, content } = req.body; // Ensure body-parser is set up to handle JSON
     try {
-      const response = await sendEmail({ from, subject, content });
+      const response = await sendEmail({ to, subject, content });
       console.log("Hello from server");
       res.status(200).send(response);
     } catch (error) {
@@ -75,6 +79,42 @@ export function app(): express.Express {
       res.status(500).send({ error: error.message });
     }
   });
+
+  // token verification api
+  server.get('/api/email-verification/:token', async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    const tokenDocRef = db.collection('verificationTokens').doc(token);
+    const tokenDoc = await tokenDocRef.get();
+
+    // first check if the token exists
+    if (!tokenDoc.exists) {
+      return res.status(404).send({ error: 'Token not found' });
+    }
+
+    // get the data from the token document
+    const tokenData = tokenDoc.data();
+    if (!tokenData || !tokenData['expiresAt']) {
+      return res.status(400).send({ error: 'Invalid token data' });
+    }
+
+    // check if the token has expired
+    const expiresAt = tokenData['expiresAt'].toDate(); // acces the date given the format of firebase
+    if (expiresAt < new Date()) {
+      return res.status(400).send({ error: 'Token has expired' });
+    }
+
+    // if everything is fine, process the token
+    await tokenDocRef.delete();
+    return res.status(200).send({ message: 'Email verified successfully' });
+
+  } catch (error) {
+    console.error('Error verifying token:', error);
+    return res.status(500).send({ error: 'Internal Server Error' });
+  }
+});
+
 
   // Serve static files from /browser
   server.get('**', express.static(browserDistFolder, {
@@ -100,3 +140,14 @@ export function app(): express.Express {
 
   return server;
 }
+
+
+// run the code on local host *for development
+
+// const PORT = process.env['PORT'] || 4000;
+
+// const server = app();
+
+// server.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });

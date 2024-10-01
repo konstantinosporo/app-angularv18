@@ -43,3 +43,6 @@ Thumbs.db
 
 # Ignore all files in the environments directory
 /src/environments/**
+
+# ignore the json firebase files
+app-angularv18-firebase-adminsdk-vcvbq-2b44b0e8e0.json

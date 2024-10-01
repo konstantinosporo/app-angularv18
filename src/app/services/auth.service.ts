@@ -18,9 +18,9 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AuthService {
 
-  private currentUser$ = new BehaviorSubject<User | null>(null);
+  private readonly currentUser$ = new BehaviorSubject<User | null>(null);
 
-  constructor(private auth: Auth) {
+  constructor(private readonly auth: Auth) {
     onAuthStateChanged(this.auth, (user) => {
       this.currentUser$.next(user);
     })

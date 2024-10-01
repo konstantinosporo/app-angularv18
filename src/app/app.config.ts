@@ -10,14 +10,14 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { environment } from './environments/environment';
-import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withFetch} from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(),
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
     provideNgIconsConfig({ size: "2.5em" }),
     // Initialize Firebase app and Firestore
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
