@@ -82,7 +82,8 @@ export function app(): express.Express {
 
   // token verification api
   server.get('/api/email-verification/:token', async (req, res) => {
-  const { token } = req.params;
+    const { token } = req.params;
+    console.log(`im inside the api ${db}`);
 
   try {
     const tokenDocRef = db.collection('verificationTokens').doc(token);
