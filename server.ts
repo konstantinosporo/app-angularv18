@@ -7,6 +7,15 @@ import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 import admin from './firebaseAdmin';
 
+console.log({
+  type: process.env["FIREBASE_TYPE"],
+  projectId: process.env["FIREBASE_PROJECT_ID"],
+  privateKeyId: process.env["FIREBASE_PRIVATE_KEY_ID"],
+  privateKey: process.env["FIREBASE_PRIVATE_KEY"],
+  clientEmail: process.env["FIREBASE_CLIENT_EMAIL"],
+  clientId: process.env["FIREBASE_CLIENT_ID"],
+});
+
 
 // Initialize Firestore
 const db = admin.firestore();
@@ -86,10 +95,9 @@ server.get('/api/email-verification/:token', async (req, res) => {
   console.log(`Received token for verification: ${token}`); // Log the received token
 
   try {
-    const tokenDocRef = db.collection('verificationTokens').doc(token);
-    const tokenDoc = await tokenDocRef.get();
+    const tokenDoc = await db.collection('verificationTokens').doc(token).get();
 
-    console.log('Token document reference:', tokenDocRef);
+    console.log('Token document reference:');
     console.log('Token document data:', tokenDoc.exists); // Log existence of the document
 
     // Check if the token exists
@@ -112,8 +120,6 @@ server.get('/api/email-verification/:token', async (req, res) => {
       return res.status(400).send({ error: 'Token has expired' });
     }
 
-    // Process the token
-    await tokenDocRef.delete();
     console.log('Token verified successfully');
     return res.status(200).send({ message: 'Email verified successfully' });
 
