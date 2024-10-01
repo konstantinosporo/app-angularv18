@@ -61,11 +61,14 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
+  server.use(express.json());
+
   // Example Express Rest API endpoints
   server.post('/api/send-email', async (req, res) => {
     const { from, subject, content } = req.body; // Ensure body-parser is set up to handle JSON
     try {
       const response = await sendEmail({ from, subject, content });
+      console.log("Hello from server");
       res.status(200).send(response);
     } catch (error) {
       if(error instanceof Error)
