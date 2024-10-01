@@ -81,34 +81,40 @@ export function app(): express.Express {
   });
 
   // token verification api
-  server.get('/api/email-verification/:token', async (req, res) => {
-    const { token } = req.params;
-    console.log(`im inside the api ${db}`);
+server.get('/api/email-verification/:token', async (req, res) => {
+  const { token } = req.params;
+  console.log(`Received token for verification: ${token}`); // Log the received token
 
   try {
     const tokenDocRef = db.collection('verificationTokens').doc(token);
     const tokenDoc = await tokenDocRef.get();
 
-    console.log(tokenDocRef, tokenDoc);
-    // first check if the token exists
+    console.log('Token document reference:', tokenDocRef);
+    console.log('Token document data:', tokenDoc.exists); // Log existence of the document
+
+    // Check if the token exists
     if (!tokenDoc.exists) {
+      console.log('Token not found');
       return res.status(404).send({ error: 'Token not found' });
     }
 
-    // get the data from the token document
     const tokenData = tokenDoc.data();
+    console.log('Token data:', tokenData); // Log token data
+
     if (!tokenData || !tokenData['expiresAt']) {
+      console.log('Invalid token data');
       return res.status(400).send({ error: 'Invalid token data' });
     }
 
-    // check if the token has expired
-    const expiresAt = tokenData['expiresAt'].toDate(); // acces the date given the format of firebase
+    const expiresAt = tokenData['expiresAt'].toDate();
     if (expiresAt < new Date()) {
+      console.log('Token has expired');
       return res.status(400).send({ error: 'Token has expired' });
     }
 
-    // if everything is fine, process the token
+    // Process the token
     await tokenDocRef.delete();
+    console.log('Token verified successfully');
     return res.status(200).send({ message: 'Email verified successfully' });
 
   } catch (error) {
@@ -116,6 +122,7 @@ export function app(): express.Express {
     return res.status(500).send({ error: 'Internal Server Error' });
   }
 });
+
 
 
   // Serve static files from /browser
