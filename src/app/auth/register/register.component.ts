@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 import { RegisterUser } from '../../../../lib/definitions';
 import { UsersService } from '../../services/users.service';
 import { AuthService } from '../../services/auth.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',

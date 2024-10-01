@@ -17,6 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(),
+    provideHttpClient(),
     provideNgIconsConfig({ size: "2.5em" }),
     // Initialize Firebase app and Firestore
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
