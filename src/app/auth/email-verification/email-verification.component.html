@@ -1,0 +1,13 @@
+@if(loading$){
+<p>Loading verification...</p>
+<!-- TODO ADD SPINNER -->
+}
+
+<ng-template #result>
+  @if(successMessage){
+  {{successMessage}}
+  }
+  @else {
+  {{'No verification status available.'}}
+  }
+</ng-template>

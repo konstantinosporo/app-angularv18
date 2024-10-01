@@ -88,7 +88,7 @@ export class RegisterComponent {
       to: email,
       subject: 'Email Verification',
       content: `Please click the following link to verify your email: 
-                https://app-angularv18.vercel.app/api/email-verification/?token=${token}`
+                https://app-angularv18.vercel.app/email-verification/?token=${token}`
     });
   }
 
